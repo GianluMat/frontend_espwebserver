@@ -1,5 +1,5 @@
 import axios from "axios";
-export const API_BASE_URL = "http://95.239.246.185:8086/";
+export const API_BASE_URL = "http://79.46.240.207:8086/";
 
 export const getRealTimeSensorsDataAsync = async () => {
   try {
