@@ -16,6 +16,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
+import { MqttComponent } from "../../components/MqttComponent";
 
 ChartJS.register(
   CategoryScale,
@@ -129,6 +130,12 @@ export const LightsPage: React.FC = () => {
             <Line data={historyData} options={options} />
           </div>
         )}
+      </div>
+      <div className="w-full flex flex-col justify-center items-center mt-8 border-t border-gray-700">
+        <div className="w-full flex items-center justify-center mt-4 mb-2">
+          <p className="mr-5 font-bold">Mqtt light sensor data</p>
+          <MqttComponent />
+        </div>
       </div>
     </div>
   );
