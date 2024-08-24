@@ -5,13 +5,12 @@ export const MqttComponent: React.FC = () => {
   const [messages, setMessages] = useState<string[]>([]);
 
   useEffect(() => {
-    // Connessione al broker MQTT usando WebSocket
-    const client = mqtt.connect("ws://broker.hivemq.com:8000/mqtt", {
+    // Connessione al broker MQTT usando WebSocket sicuro
+    const client = mqtt.connect("wss://broker.hivemq.com:8884/mqtt", {
       // Opzioni di connessione
       reconnectPeriod: 1000, // Tempo di riconnessione in ms
     });
 
-    // Quando il client è connesso
     client.on("connect", () => {
       console.log("Connected to MQTT broker");
       // Iscriviti a un topic
@@ -24,10 +23,17 @@ export const MqttComponent: React.FC = () => {
       });
     });
 
-    // Quando viene ricevuto un messaggio
     client.on("message", (topic, message) => {
       console.log(`Received message: ${message.toString()} on topic: ${topic}`);
       setMessages((prevMessages) => [...prevMessages, message.toString()]);
+    });
+
+    client.on("error", (err) => {
+      console.error("Connection error:", err);
+    });
+
+    client.on("close", () => {
+      console.log("Connection closed");
     });
 
     // Pulizia della connessione quando il componente viene smontato
