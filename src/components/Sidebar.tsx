@@ -5,7 +5,7 @@ import {
   XMarkIcon,
   HomeIcon,
   LightBulbIcon,
-  MagnifyingGlassIcon,
+  CogIcon,
 } from "@heroicons/react/24/solid";
 import logoSmall from "../assets/images/LogoMini1.png";
 import logoBig from "../assets/images/LogoBig.png";
@@ -56,7 +56,9 @@ export const Sidebar: React.FC = () => {
                 isSideBarExpanded ? "" : "justify-center"
               }`}
             >
-              <HomeIcon className="h-6 w-6 mr-2" />
+              <HomeIcon
+                className={`h-6 w-6 ${isSideBarExpanded ? "mr-2" : ""}`}
+              />
               {isSideBarExpanded && <span>Home</span>}
             </Link>
           </li>
@@ -67,7 +69,9 @@ export const Sidebar: React.FC = () => {
                 isSideBarExpanded ? "" : "justify-center"
               }`}
             >
-              <LightBulbIcon className="h-6 w-6 mr-2" />
+              <LightBulbIcon
+                className={`h-6 w-6 ${isSideBarExpanded ? "mr-2" : ""}`}
+              />
               {isSideBarExpanded && <span>Lights</span>}
             </Link>
           </li>
@@ -76,6 +80,17 @@ export const Sidebar: React.FC = () => {
       </nav>
       {/* account */}
       <div className="p-3 border-t border-gray-700">
+        <div className="flex items-center py-2 p2-4 mb-2 hover:bg-gray-700 rounded">
+          <Link
+            to="/settings"
+            className={`flex items-center w-full transition ${
+              isSideBarExpanded ? "" : "justify-center"
+            }`}
+          >
+            <CogIcon className={`h-6 w-6 ${isSideBarExpanded ? "mr-2" : ""}`} />
+            {isSideBarExpanded && <span>Settings</span>}
+          </Link>
+        </div>
         <div
           className={`flex items-center w-full transition ${
             isSideBarExpanded ? "" : "justify-center"
