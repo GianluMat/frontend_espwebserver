@@ -32,7 +32,7 @@ export const Sidebar: React.FC = () => {
           alt="Logo"
           className={`h-10 ${isSideBarExpanded ? "w-52" : "w-11"}`}
         />
-        <div className="absolute top-1/2 transform -translate-y-1/2 transition-transform duration-300 right-[-0.5rem] z-40 flex items-center justify-center rounded-full bg-gray-800 p-1">
+        <div className="absolute top-1/2 transform -translate-y-1/2 transition-transform duration-300 right-[-0.8rem] z-40 flex items-center justify-center rounded-full bg-gray-800 p-1.5">
           <button
             onClick={toggleSidebar}
             // className="absolute top-1/2 transform -translate-y-1/2 transition-transform duration-300 right-[-0.5rem]"
