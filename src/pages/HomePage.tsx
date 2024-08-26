@@ -1,46 +1,45 @@
 import React, { useEffect, useState } from "react";
 import { SensorCard } from "../components/SensorCard";
 import { useMqtt } from "../context/MqttContext";
-import { Sensor } from "../types/Sensors";
+import { MqttMessage } from "../types/Sensors";
 
 export const HomePage: React.FC = () => {
-  const [sensorCards, setSensorCards] = useState<Sensor[]>([]);
   const { messages } = useMqtt();
+  const [latestSensors, setLatestSensors] = useState<{
+    [key: string]: MqttMessage;
+  }>({});
 
   useEffect(() => {
-    const latestSensors: { [key: string]: Sensor } = {};
+    const latestSensorsData: { [key: string]: MqttMessage } = {};
 
-    // Elenco di messaggi, per ogni messaggio
-    messages.forEach((message) => {
-      const sensorType = message.sensor; // Sostituisci con il campo corretto del tuo messaggio
-      const sensorValue = message.value; // Sostituisci con il campo corretto del tuo messaggio
-      const sensorTimestamp = message.timestamp!; // Sostituisci con il campo corretto del tuo messaggio
+    // Itera su ciascun tipo di sensore nel dizionario dei messaggi
+    Object.keys(messages).forEach((sensor) => {
+      const sensorMessages = messages[sensor];
 
-      // Crea un oggetto Sensor con il valore e timestamp correnti
-      const sensor: Sensor = {
-        sensor: sensorType,
-        value: sensorValue,
-        timestamp: sensorTimestamp,
-      };
+      if (sensorMessages.length > 0) {
+        // Trova l'ultimo messaggio in base al timestamp
+        const latestMessage = sensorMessages.reduce((latest, current) => {
+          return current.timestamp! > latest.timestamp! ? current : latest;
+        });
 
-      // Aggiorna il sensore più recente per questo ID
-      latestSensors[sensorType] = sensor;
+        latestSensorsData[sensor] = latestMessage;
+      }
     });
 
-    // Converti l'oggetto in un array
-    setSensorCards(Object.values(latestSensors));
+    // Aggiorna lo stato con i sensori più recenti
+    setLatestSensors(latestSensorsData);
   }, [messages]);
 
   return (
     <div>
       <h1 className="text-3xl font-bold">Welcome to the Home Page</h1>
       <p className="mt-4">This is the home page content.</p>
-      {sensorCards.map((sensorCard, i) => (
+      {Object.keys(latestSensors).map((sensorType, i) => (
         <SensorCard
           key={i}
-          icon={sensorCard.sensor}
-          value={sensorCard.value}
-          timestamp={sensorCard.timestamp!.toLocaleString()}
+          icon={sensorType}
+          value={latestSensors[sensorType].value}
+          timestamp={latestSensors[sensorType].timestamp!.toLocaleString()}
         />
       ))}
     </div>

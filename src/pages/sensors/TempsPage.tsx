@@ -26,7 +26,7 @@ ChartJS.register(
   Legend
 );
 
-export const LightsPage: React.FC = () => {
+export const TempsPage: React.FC = () => {
   const [historyMqttMessage, setHistoryMqttMessage] = useState<MqttMessage[]>(
     []
   );
@@ -42,7 +42,7 @@ export const LightsPage: React.FC = () => {
   const [locations, setLocations] = useState<string[]>([]);
   const [historyLocations, setHistoryLocations] = useState<string[]>([]);
   const { messages } = useMqtt();
-  const sensor = "light";
+  const sensor = "temperature";
 
   const fetchHistoryData = async () => {
     try {
@@ -62,17 +62,17 @@ export const LightsPage: React.FC = () => {
       ];
       setHistoryLocations(uniqueHistoryLocations);
 
-      const filteredSensorData = selectedLocation
+      const filteredMessagesData = selectedLocation
         ? messages.filter(
             (message) => message.location === selectedHistoryLocation
           )
         : messages;
 
       setHistorySensorData(
-        _.map(filteredSensorData, (message) => message.value)
+        _.map(filteredMessagesData, (message) => message.value)
       );
       setHistoryTimestamps(
-        _.map(filteredSensorData, (message) => message.timestamp)
+        _.map(filteredMessagesData, (message) => message.timestamp)
       );
     } catch (error) {
       console.error("Error fetching history data", error);
@@ -82,15 +82,17 @@ export const LightsPage: React.FC = () => {
   };
 
   const filterHistoryData = () => {
-    const filteredSensorData = selectedHistoryLocation
+    const filteredMessagesData = selectedHistoryLocation
       ? historyMqttMessage.filter(
           (message) => message.location === selectedHistoryLocation
         )
       : historyMqttMessage;
 
-    setHistorySensorData(_.map(filteredSensorData, (message) => message.value));
+    setHistorySensorData(
+      _.map(filteredMessagesData, (message) => message.value)
+    );
     setHistoryTimestamps(
-      _.map(filteredSensorData, (message) => message.timestamp)
+      _.map(filteredMessagesData, (message) => message.timestamp)
     );
   };
 
@@ -119,7 +121,7 @@ export const LightsPage: React.FC = () => {
     labels: timestamps,
     datasets: [
       {
-        label: "Light Intensity",
+        label: "Temperature degree",
         data: sensorData,
         fill: false,
         backgroundColor: "rgba(75,192,192,0.2)",
@@ -132,7 +134,7 @@ export const LightsPage: React.FC = () => {
     labels: historyTimestamps,
     datasets: [
       {
-        label: "History light Intensity",
+        label: "History temperature degree",
         data: historySensorData,
         fill: false,
         backgroundColor: "rgba(75,192,192,0.2)",
@@ -160,8 +162,8 @@ export const LightsPage: React.FC = () => {
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <h2 className="text-2xl font-bold">Lights Page</h2>
-      <p className="mt-4 mb-2 font-bold">Realtime light sensor data</p>
+      <h2 className="text-2xl font-bold">Temperatures Page</h2>
+      <p className="mt-4 mb-2 font-bold">Realtime temperature sensor data</p>
       {/* Dropdown per selezionare la location in tempo reale */}
       <div className="mt-4 mb-2">
         <label className="font-bold mr-2">Select Location (Real-time):</label>
@@ -183,7 +185,7 @@ export const LightsPage: React.FC = () => {
       </div>
       <div className="w-full flex flex-col justify-center items-center mt-8 border-t border-gray-700">
         <div className="w-full flex items-center justify-center mt-4 mb-2">
-          <p className="mr-5 font-bold">History light sensor data</p>
+          <p className="mr-5 font-bold">History temperatures sensor data</p>
           <button
             onClick={fetchHistoryData}
             className="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"

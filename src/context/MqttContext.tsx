@@ -6,10 +6,10 @@ import React, {
   ReactNode,
 } from "react";
 import mqtt, { MqttClient } from "mqtt";
-import { Sensor } from "../types/Sensors";
+import { MqttMessage } from "../types/Sensors";
 
 interface SensorMessages {
-  [key: string]: Sensor[]; // Dizionario con chiave sensor e valore una lista di messaggi
+  [key: string]: MqttMessage[]; // Dizionario con chiave sensor e valore una lista di messaggi
 }
 
 // Definisci il tipo per il contesto
@@ -83,19 +83,14 @@ export const MqttProvider: React.FC<MqttProviderProps> = ({ children }) => {
 
   // Funzione per aggiungere un messaggio al contesto
   const addMessage = (message: string) => {
-    const msgMqtt = JSON.parse(message) as Sensor;
-    const updatedMsgMqtt = {
-      ...msgMqtt,
-      timestamp: new Date(),
-    };
-    // setMessages((prevMessages) => [...prevMessages, updatedMsgMqtt]);
+    const msgMqtt = JSON.parse(message) as MqttMessage;
+
     setMessages((prevMessages) => {
-      // Copia l'array di messaggi per il sensore specifico, oppure crea un nuovo array se è il primo messaggio
       const sensorMessages = prevMessages[msgMqtt.sensor] || [];
 
       return {
         ...prevMessages,
-        [msgMqtt.sensor]: [...sensorMessages, updatedMsgMqtt], // Aggiunge il nuovo messaggio alla lista del sensore
+        [msgMqtt.sensor]: [...sensorMessages, msgMqtt],
       };
     });
   };
