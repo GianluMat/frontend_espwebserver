@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { SensorCard } from "../components/SensorCard";
 import { useMqtt } from "../context/MqttContext";
 import { Sensor } from "../types/Sensors";
-import { LightBulbIcon } from "@heroicons/react/24/solid";
 
 export const HomePage: React.FC = () => {
   const [sensorCards, setSensorCards] = useState<Sensor[]>([]);
@@ -36,11 +35,12 @@ export const HomePage: React.FC = () => {
     <div>
       <h1 className="text-3xl font-bold">Welcome to the Home Page</h1>
       <p className="mt-4">This is the home page content.</p>
-      {sensorCards.map((sensorCard) => (
+      {sensorCards.map((sensorCard, i) => (
         <SensorCard
+          key={i}
           icon={sensorCard.sensor}
           value={sensorCard.value}
-          timestamp={sensorCard.timestamp!.toLocaleDateString()}
+          timestamp={sensorCard.timestamp!.toLocaleString()}
         />
       ))}
     </div>

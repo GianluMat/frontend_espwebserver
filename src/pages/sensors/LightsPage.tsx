@@ -42,9 +42,7 @@ export const LightsPage: React.FC = () => {
       // Aggiorna lo stato con i dati presi dal db
       setHistoryLightData(sensors.map((sensor) => sensor.value));
       setHistoryTimestamps(
-        sensors.map((sensor) =>
-          new Date(sensor.timestamp!).toLocaleTimeString()
-        )
+        sensors.map((sensor) => new Date(sensor.timestamp!).toLocaleString())
       );
     } catch (error) {
       console.error("Error fetching history data", error);
@@ -58,7 +56,7 @@ export const LightsPage: React.FC = () => {
       setLightData((prevData) => [...prevData, message.value]);
       setTimestamps((prevTime) => [
         ...prevTime,
-        message.timestamp!.toLocaleTimeString(),
+        message.timestamp!.toLocaleString(),
       ]);
     });
   };
