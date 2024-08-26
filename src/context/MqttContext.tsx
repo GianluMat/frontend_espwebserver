@@ -8,10 +8,14 @@ import React, {
 import mqtt, { MqttClient } from "mqtt";
 import { Sensor } from "../types/Sensors";
 
+interface SensorMessages {
+  [key: string]: Sensor[]; // Dizionario con chiave sensor e valore una lista di messaggi
+}
+
 // Definisci il tipo per il contesto
 interface MqttContextType {
   client: MqttClient | null;
-  messages: Sensor[];
+  messages: SensorMessages;
   addMessage: (message: string) => void;
 }
 
@@ -35,7 +39,7 @@ interface MqttProviderProps {
 // Componente MqttProvider che avvolge l'app
 export const MqttProvider: React.FC<MqttProviderProps> = ({ children }) => {
   const [client, setClient] = useState<MqttClient | null>(null);
-  const [messages, setMessages] = useState<Sensor[]>([]);
+  const [messages, setMessages] = useState<SensorMessages>({});
 
   useEffect(() => {
     // Connessione al broker MQTT
@@ -46,7 +50,7 @@ export const MqttProvider: React.FC<MqttProviderProps> = ({ children }) => {
 
     mqttClient.on("connect", () => {
       console.log("Connected to MQTT broker");
-      mqttClient.subscribe("gian33home/sensors/#", (err) => {
+      mqttClient.subscribe("gian33home/homesensors/#", (err) => {
         if (!err) {
           console.log("Subscribed to topic");
         } else {
@@ -84,7 +88,16 @@ export const MqttProvider: React.FC<MqttProviderProps> = ({ children }) => {
       ...msgMqtt,
       timestamp: new Date(),
     };
-    setMessages((prevMessages) => [...prevMessages, updatedMsgMqtt]);
+    // setMessages((prevMessages) => [...prevMessages, updatedMsgMqtt]);
+    setMessages((prevMessages) => {
+      // Copia l'array di messaggi per il sensore specifico, oppure crea un nuovo array se è il primo messaggio
+      const sensorMessages = prevMessages[msgMqtt.sensor] || [];
+
+      return {
+        ...prevMessages,
+        [msgMqtt.sensor]: [...sensorMessages, updatedMsgMqtt], // Aggiunge il nuovo messaggio alla lista del sensore
+      };
+    });
   };
 
   return (
