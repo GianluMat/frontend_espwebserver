@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { SensorCard } from "../components/SensorCard";
 import { useMqtt } from "../context/MqttContext";
 import { MqttMessage } from "../types/Sensors";
+import _ from "lodash";
 
 export const HomePage: React.FC = () => {
   const { messages } = useMqtt();
@@ -34,13 +35,8 @@ export const HomePage: React.FC = () => {
     <div>
       <h1 className="text-3xl font-bold">Welcome to the Home Page</h1>
       <p className="mt-4">This is the home page content.</p>
-      {Object.keys(latestSensors).map((sensorType, i) => (
-        <SensorCard
-          key={i}
-          icon={sensorType}
-          value={latestSensors[sensorType].value}
-          timestamp={latestSensors[sensorType].timestamp!.toLocaleString()}
-        />
+      {_.map(Object.keys(latestSensors), (sensor, i) => (
+        <SensorCard key={i} sensorMessage={latestSensors[sensor]} />
       ))}
     </div>
   );
