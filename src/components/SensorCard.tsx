@@ -35,7 +35,7 @@ export const SensorCard: React.FC<SensorCardProps> = ({ sensorMessage }) => {
   };
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-4 my-1 flex items-center space-x-4">
+    <div className="w-full h-fit bg-white shadow-lg rounded-lg p-4 my-1 flex items-center space-x-4 cursor-default">
       <div className="flex-shrink-0">
         {getIconComponent(sensorMessage.sensor)}
       </div>

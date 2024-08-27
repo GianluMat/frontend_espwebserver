@@ -10,6 +10,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
@@ -23,7 +24,8 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
 export const LightsPage: React.FC = () => {
@@ -143,11 +145,6 @@ export const LightsPage: React.FC = () => {
 
   const options = {
     maintainAspectRatio: false,
-    plugins: {
-      filler: {
-        propagate: true,
-      },
-    },
   };
 
   useEffect(() => {
