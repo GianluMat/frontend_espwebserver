@@ -123,9 +123,9 @@ export const TempsPage: React.FC = () => {
       {
         label: "Temperature degree",
         data: sensorData,
-        fill: false,
-        backgroundColor: "rgba(75,192,192,0.2)",
-        borderColor: "rgba(75,192,192,1)",
+        fill: true,
+        backgroundColor: "rgba(252,3,40,0.2)",
+        borderColor: "rgba(252,3,40,1)",
       },
     ],
   };
@@ -136,9 +136,9 @@ export const TempsPage: React.FC = () => {
       {
         label: "History temperature degree",
         data: historySensorData,
-        fill: false,
-        backgroundColor: "rgba(75,192,192,0.2)",
-        borderColor: "rgba(75,192,192,1)",
+        fill: true,
+        backgroundColor: "rgba(252,3,40,0.2)",
+        borderColor: "rgba(252,3,40,1)",
       },
     ],
   };

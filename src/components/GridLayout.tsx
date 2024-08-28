@@ -1,4 +1,4 @@
-import GridLayout from "react-grid-layout";
+import GridLayout, { Layout } from "react-grid-layout";
 import { MqttMessage } from "../types/Sensors";
 import { useMqtt } from "../context/MqttContext";
 import { useEffect, useState } from "react";
@@ -12,6 +12,12 @@ export const MyGridLayout: React.FC = () => {
   const [latestSensors, setLatestSensors] = useState<{
     [key: string]: MqttMessage;
   }>({});
+  const [layout, setLayout] = useState<Layout[]>([]);
+
+  const onLayoutChange = (newLayout: Layout[]) => {
+    setLayout(newLayout);
+    localStorage.setItem("gridLayout", JSON.stringify(newLayout));
+  };
 
   useEffect(() => {
     const latestSensorsData: { [key: string]: MqttMessage } = {};
@@ -32,23 +38,60 @@ export const MyGridLayout: React.FC = () => {
 
     // Aggiorna lo stato con i sensori più recenti
     setLatestSensors(latestSensorsData);
+
+    // Recupera il layout salvato
+    const savedLayout = JSON.parse(localStorage.getItem("gridLayout") || "[]");
+
+    if (savedLayout.length > 0) {
+      // Verifica se tutti i sensori di latestSensorsData sono presenti nel layout salvato
+      const newLayout = [...savedLayout];
+
+      Object.keys(latestSensorsData).forEach((sensor) => {
+        if (!newLayout.some((layoutItem) => layoutItem.i === sensor)) {
+          console.log(newLayout);
+          // Aggiungi il sensore mancante al layout
+          newLayout.push({
+            i: sensor,
+            x: newLayout.length, // Puoi cambiare la logica di posizionamento
+            y: 0,
+            w: 1,
+            h: 4,
+          });
+        }
+      });
+
+      setLayout(newLayout);
+      localStorage.setItem("gridLayout", JSON.stringify(newLayout));
+    } else {
+      // Imposta un layout di default se non c'è nulla nel localStorage
+      const initialLayout = Object.keys(latestSensorsData).map((sensor, i) => ({
+        i: sensor,
+        x: i,
+        y: 0,
+        w: 1,
+        h: 4,
+        static: false,
+        moved: false,
+      }));
+      setLayout(initialLayout);
+      localStorage.setItem("gridLayout", JSON.stringify(initialLayout));
+    }
   }, [messages]);
 
-  //   const layout = [
-  //     { i: "0", x: 0, y: 0, w: 3, h: 4 }, //, static: true },
-  //     // { i: "2", x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4 },
-  //     // { i: "3", x: 4, y: 0, w: 1, h: 2 },
-  //   ];
   return (
     <GridLayout
-      className="layout"
-      //   layout={layout}
+      className="layout bg-blue-50"
       cols={4}
       rowHeight={30}
       width={1200}
+      onLayoutChange={onLayoutChange}
+      //   // This turns off compaction so you can place items wherever.
+      //   verticalCompact={false}
+      //   // This turns off rearrangement so items will not be pushed arround.
+      //   preventCollision={true}
     >
       {_.map(Object.keys(latestSensors), (sensor, i) => (
-        <div key={i} data-grid={{ x: i, y: 0, w: 1, h: 4 }}>
+        <div key={sensor} data-grid={layout.find((l) => l.i === sensor)}>
           <SensorCard key={i} sensorMessage={latestSensors[sensor]} />
         </div>
       ))}

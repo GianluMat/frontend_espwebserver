@@ -124,8 +124,8 @@ export const LightsPage: React.FC = () => {
         label: "Light Intensity",
         data: sensorData,
         fill: true,
-        backgroundColor: "rgba(75,192,192,0.2)",
-        borderColor: "rgba(75,192,192,1)",
+        backgroundColor: "rgba(250,204,21,0.2)",
+        borderColor: "rgba(252,211,3,1)",
       },
     ],
   };
@@ -136,9 +136,9 @@ export const LightsPage: React.FC = () => {
       {
         label: "History light Intensity",
         data: historySensorData,
-        fill: false,
-        backgroundColor: "rgba(75,192,192,0.2)",
-        borderColor: "rgba(75,192,192,1)",
+        fill: true,
+        backgroundColor: "rgba(250,204,21,0.2)",
+        borderColor: "rgba(252,211,3,1)",
       },
     ],
   };
@@ -161,7 +161,7 @@ export const LightsPage: React.FC = () => {
   }, [selectedHistoryLocation]);
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center mb-5">
       <h2 className="text-2xl font-bold">Lights Page</h2>
       <p className="mt-4 mb-2 font-bold">Realtime light sensor data</p>
       {/* Dropdown per selezionare la location in tempo reale */}
